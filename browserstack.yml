@@ -1,0 +1,22 @@
+userName: tadiwanyika_4xanPI
+accessKey: jWqKsMFiBpSZXAc14w3q
+platforms:
+  - os: Windows
+    osVersion: 10
+    browserName: Chrome
+    browserVersion: 120.0
+  - os: Windows
+    osVersion: 11
+    browserName: Chrome
+    browserVersion: latest
+  - deviceName: iPhone X
+    osVersion: 11
+    browserName: safari
+    deviceOrientation: portrait
+browserstackLocal: true
+buildName: bstack-demo
+buildIdentifier: ${BUILD_NUMBER}
+projectName: Controlled motives testing
+debug: true
+networkLogs: true
+consoleLogs: info
