@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Signup - Controlled Motives</title>
+    </head>
+    <body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .signup-container {
+            width: 400px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .signup-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-family: ControlledFont;
+        }
+
+        .signup-header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+
+        }
+
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .signup-form label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .signup-form input, .signup-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .signup-form textarea {
+            height: 100px;
+        }
+
+        .signup-form button {
+            background: linear-gradient(to right, #1f4037, #99f2c8);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            color: #000000;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .signup-form button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #99f2c8, #1f4037);
+        }
+
+        .blockchain-note {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            text-align: center;
+        }
+
+        .artist-wallet {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .artist-wallet a {
+            text-decoration: none;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .artist-wallet a:hover {
+            transform: scale(1.1);
+        }
+
+        .wallet-insight {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            text-align: center;
+            line-height: 1.5;
+            opacity: 0.8;
+        }
+
+         .loading {
+            display: none;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        #signupResult {
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        @font-face {
+        font-family: 'ControlledFont';
+        src: url("{% static 'fonts/controlledfont.otf' %}") format('truetype');
+    }
+    </style>
+
+
+
+    <div class="signup-container">
+        <div class="signup-header">
+            <h1>Artist Signup</h1>
+            <p>Join Controlled Motives and showcase your art with cutting-edge blockchain technology.</p>
+        </div>
+        <form class="signup-form" action="/profiles/login" >
+        <label>Full Name</label>
+        <input type="text" id="fullName" placeholder="Enter your full name" required>
+
+        <label>Username</label>
+        <input type="text" id="username" placeholder="Choose a username" required>
+
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Create a password" required>
+
+        <label>Bio</label>
+        <textarea id="bio" placeholder="Tell us about yourself" required></textarea>
+
+        <button type="submit" onclick="SignupUser">🚀 Create Account</button>
+
+        <div class="loading" id="loading">⏳ Creating Account...</div>
+        <div id="signupResult"></div>
+    </form>
+        <div class="artist-wallet">
+            <a href="/wallet-setup">Add Wallet Information</a>
+        </div>
+        <p class="wallet-insight">Adding your wallet connects you to the blockchain world, enabling NFT creation and secure payments. Artists receive money directly to their wallets, ensuring transparency and efficiency in transactions.</p>
+        <p class="blockchain-note">Your blockchain wallet address will enable NFT minting and secure transactions.</p>
+    </div>
+<script>
+   async function signupUser() {
+    const fullName = document.getElementById("fullName").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const signupResult = document.getElementById("signupResult");
+    const loading = document.getElementById("loading");
+
+    signupResult.innerHTML = "";
+    loading.style.display = "block";  // ✅ Show loading
+
+    if (!fullName || !username || !email || !password) {
+        loading.style.display = "none";
+        signupResult.innerHTML = "❌ All fields are required!";
+        return;
+    }
+
+    if (!fullName.includes(" ")) {
+        loading.style.display = "none";
+        signupResult.innerHTML = "❌ Please enter your full name!";
+        return;
+    }
+
+    // Encode data as URL parameters for a GET request
+    const queryParams = new URLSearchParams({
+        full_name: fullName,
+        username: username,
+        email: email,
+        password: password
+    }).toString();
+
+    try {
+        const response = await fetch(`/profiles/artist_signup?${queryParams}`, { method: "GET" });
+
+        const data = await response.json();
+        loading.style.display = "none";
+
+        if (data.success) {
+            signupResult.innerHTML = "✅ Account created successfully! Redirecting...";
+            setTimeout(() => {
+                window.location.href = "/profiles/login";
+            }, 2000);
+        } else {
+            signupResult.innerHTML = `❌ ${data.error}`;
+        }
+    } catch (error) {
+        loading.style.display = "none";
+        signupResult.innerHTML = "❌ Failed to create account!";
+    }
+}
+
+
+
+</script>
+
+
+</body>
+</html>

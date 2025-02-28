@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Page - Controlled Motives</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/artist.css' %}">
+</head>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+.artist-page {
+    padding: 2rem;
+}
+
+.page-title {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-family: 'Playfair Display', serif;
+    color: #f0f0f0;
+}
+
+.artist-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+}
+
+.artist-card {
+    background-color: #2a2a2a;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in forwards;
+}
+
+.artist-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.artist-icon {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+}
+
+.artist-name {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-family: 'Montserrat', sans-serif;
+    color: #f0f0f0;
+}
+
+.artist-meta {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 0.5rem;
+}
+
+.time-ago, .wallet-address {
+    color: #f0f0f0;
+    font-weight: bold;
+}
+
+.artist-name i {
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+    color: #f0f0f0;
+}
+
+.artist-tagline, .artist-bio {
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    color: #cccccc;
+}
+
+.bio-card {
+    grid-column: span 2;
+}
+
+.empty-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.artist-card:nth-child(1) { animation-delay: 0.1s; }
+.artist-card:nth-child(2) { animation-delay: 0.2s; }
+.artist-card:nth-child(3) { animation-delay: 0.3s; }
+.artist-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+  </style>
+<body>
+    <div class="artist-page">
+        <h1 class="page-title">{{ page_title }}</h1>
+        <div class="artist-grid">
+            {% for artist in artists %}
+                <div class="artist-card {% if artist.has_bio %}bio-card{% endif %}">
+                    {% if artist.profile_picture and artist.profile_picture.url %}
+                        <img src="{{ artist.profile_picture.url }}" alt="{{ artist.name }}" class="artist-icon">
+                    {% else %}
+                        <img src="{% static 'images/controlledlogo.jpg' %}" alt="{{ artist.name }}" class="artist-icon">
+                    {% endif %}
+                    <h2 class="artist-name">
+                        {{ artist.user }}
+                        <i class="fas {% if artist.medium == 'painting' %}fa-paint-brush{% elif artist.medium == 'photography' %}fa-camera{% elif artist.medium == 'drawing' %}fa-pencil-alt{% else %}fa-palette{% endif %}"></i>
+                    </h2>
+                    {% if artist.bio %}
+                        <p class="artist-bio">{{ artist.bio }}</p>
+                    {% else %}
+                        <p class="artist-tagline">{{ artist.tagline }}</p>
+                    {% endif %}
+                    <p class="artist-meta">Joined: <span class="time-ago" data-time="{{ artist.created_at|date:'c' }}"></span></p>
+                    {% if artist.blockchain_address %}
+                        <p class="artist-meta">Wallet: <span class="wallet-address">{{ artist.blockchain_address|slice:":6" }}...{{ artist.blockchain_address|slice:"-4:" }}</span></p>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p class="empty-message">No artists found at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.time-ago').forEach(span => {
+                const date = new Date(span.dataset.time);
+                const now = new Date();
+                const seconds = Math.floor((now - date) / 1000);
+                let interval = Math.floor(seconds / 31536000); // Years
+                if (interval > 1) return span.textContent = `${interval} years ago`;
+                interval = Math.floor(seconds / 2592000); // Months
+                if (interval > 1) return span.textContent = `${interval} months ago`;
+                interval = Math.floor(seconds / 86400); // Days
+                if (interval > 1) return span.textContent = `${interval} days ago`;
+                interval = Math.floor(seconds / 3600); // Hours
+                if (interval > 1) return span.textContent = `${interval} hours ago`;
+                interval = Math.floor(seconds / 60); // Minutes
+                if (interval > 1) return span.textContent = `${interval} min ago`;
+                span.textContent = 'just now';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+
+{% block content %}
+<div class="subscription-container">
+    <h1 class="plan-title">{{ plan.name }}</h1>
+    <p class="plan-price">${{ plan.price }}</p>
+    <p class="plan-duration">{{ plan.duration_days }} days access</p>
+
+    <div class="plan-features">
+        <h3>Features:</h3>
+        <ul>
+            {% for feature in plan.features.splitlines %}
+                <li>{{ feature }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <a href=" " class="subscribe-button">
+        Subscribe with Stripe
+    </a>
+</div>
+
+<style>
+    /* Subscription Page Styling */
+    .subscription-container {
+        max-width: 600px;
+        margin: 80px auto;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        text-align: center;
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .plan-title {
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+    }
+
+    .plan-price {
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: #FFD700; /* Gold color */
+    }
+
+    .plan-duration {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 20px;
+    }
+
+    .plan-features h3 {
+        font-size: 20px;
+        margin-bottom: 8px;
+        color: #ddd;
+    }
+
+    .plan-features ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .plan-features ul li {
+        font-size: 16px;
+        margin: 5px 0;
+        padding: 5px;
+        color: rgba(255, 255, 255, 0.8);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .subscribe-button {
+        display: inline-block;
+        margin-top: 25px;
+        padding: 12px 20px;
+        font-size: 18px;
+        font-weight: 500;
+        text-decoration: none;
+        color: #000;
+        background: #FFD700;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+    }
+
+    .subscribe-button:hover {
+        background: #E6C200;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}

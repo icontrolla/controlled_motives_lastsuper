@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Ethereum</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #121212;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 90%;
+            max-width: 400px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #444;
+            background: #222;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        button {
+            padding: 12px 18px;
+            background: #e50914;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #f62a2a;
+        }
+
+        .loading {
+            display: none;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        #txnResult {
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        a {
+            color: #1e90ff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Send Ethereum</h1>
+
+    <input type="text" id="toAddress" placeholder="Recipient Address (0x...)" required>
+    <input type="number" id="amount" step="0.001" min="0.001" value="0.01" required>
+
+    <button onclick="sendEthereum()">🚀 Send ETH</button>
+
+    <p class="loading" id="loading">⏳ Sending Transaction...</p>
+    <p id="txnResult"></p>
+
+    <script>
+        async function sendEthereum() {
+            const toAddress = document.getElementById("toAddress").value.trim();
+            const amount = document.getElementById("amount").value.trim();
+            const txnResult = document.getElementById("txnResult");
+            const loading = document.getElementById("loading");
+
+            txnResult.innerHTML = "";
+            loading.style.display = "block";
+
+            if (!toAddress || !amount || parseFloat(amount) <= 0) {
+                loading.style.display = "none";
+                txnResult.innerHTML = "❌ Invalid address or amount!";
+                return;
+            }
+
+            try {
+                const response = await fetch("/send-eth/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `to_address=${toAddress}&amount=${amount}`
+                });
+
+                const data = await response.json();
+                loading.style.display = "none";
+
+                if (data.txn_hash) {
+                    txnResult.innerHTML = `✅ Transaction Sent! <br>
+                        <a href="https://etherscan.io/tx/${data.txn_hash}" target="_blank">View on Etherscan</a>`;
+                } else {
+                    txnResult.innerHTML = "❌ Error sending transaction!";
+                }
+            } catch (error) {
+                loading.style.display = "none";
+                txnResult.innerHTML = "❌ Failed to send transaction!";
+            }
+        }
+    </script>
+</body>
+</html>

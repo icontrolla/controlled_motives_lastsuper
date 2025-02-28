@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% load socialaccount %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controlled Motives</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'amsterfont', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        @font-face {
+            font-family: amsterfont;
+            src: url("{% static 'fonts/amsterfont.ttf' %}");
+        }
+        @font-face {
+            font-family: creepfont;
+            src: url("{% static 'fonts/creepfont.ttf' %}");
+        }
+
+        /* Animated Background */
+        body:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("{% static 'images/cinematic-bg.jpg' %}") no-repeat center center/cover;
+            opacity: 0.3;
+            z-index: -1;
+            filter: blur(5px);
+        }
+
+        /* Login Container */
+        .login-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 400px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .login-container h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: #f9f9f9;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .login-container input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .login-container button {
+            background: linear-gradient(135deg, #ff4b2b, #ff416c);
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.6);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .login-container button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.8);
+        }
+
+        .divider {
+            margin: 20px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+
+        .divider span {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 0 10px;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .signup {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .signup a {
+            color: #ff416c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signup a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        video#bgVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <video id="bgVideo" autoplay loop muted>
+        <source src="{% static 'images/The Art Images/signup_bg.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="login-container">
+        <h1>Controlled Motives</h1>
+        <form id="loginForm" method="POST" action="{% url 'profiles:login' %}">
+            {% csrf_token %}
+            <input id="username" name="username" type="text" placeholder="Username" required>
+            <input id="password" name="password" type="password" placeholder="Password" required>
+            <button type="submit" id="submit">Log In</button>
+        </form>
+        <div class="divider">
+            <span>OR</span>
+        </div>
+        <div class="signup">
+            <p>Don't have an account? <a href="{% url 'profiles:artist_signup' %}">Sign up</a></p>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        loginForm.addEventListener("submit", function(event) {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (!username || !password) {
+                event.preventDefault();
+                alert("Please fill in both fields.");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flower Gallery</title>
+</head>
+<body>
+    <h1>Flower Gallery</h1>
+    <ul>
+        {% for artwork in artworks %}
+            <li>{{ artwork.title }} by {{ artwork.artist }} - 🌹 {{ artwork.flowers }} flowers</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

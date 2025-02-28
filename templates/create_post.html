@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>createyourpost</title>
+    {% load static %}
+    <style>
+        /* Fullscreen cinematic background */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                url("{% static 'images/cinematic-bg.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+        }
+    
+        /* Form container styling */
+        .create-post-container {
+            max-width: 700px;
+            margin: 5% auto;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            text-align: center;
+        }
+    
+        .create-post-container h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #e50914; /* Netflix red */
+            margin-bottom: 10px;
+        }
+    
+        .create-post-container p {
+            font-size: 16px;
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+    
+        /* Tabs for choosing between Video and Image post */
+        .post-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+    
+        .post-tab {
+            flex: 1;
+            padding: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #ccc;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+    
+        .post-tab.active {
+            color: #e50914;
+            border-color: #e50914;
+        }
+    
+        /* Form input styling */
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+        }
+    
+        input[type="file"] {
+            padding: 5px;
+        }
+    
+        textarea::placeholder,
+        input::placeholder {
+            color: #aaa;
+        }
+    
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            background: #e50914;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+    
+        button:hover {
+            background: #f62a2a;
+        }
+        .home-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #e50914;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .home-button:hover {
+            background-color: #f62a2a;
+            transform: scale(1.1);
+        }
+       
+    </style>
+</head>
+<body>
+    <a href="{% url 'profiles:home' %}" class="home-button">Home</a>
+    <div class="create-post-container">
+        <h1>Create a Post</h1>
+        <p>Share your aesthetic moment or a stunning image with the world</p>
+    
+        <!-- Post Type Tabs -->
+        <div class="post-tabs">
+            <div class="post-tab active" id="tab-video" onclick="showTab('video')">Aesthetic Moment (Video)</div>
+            <div class="post-tab" id="tab-image" onclick="showTab('image')">Image (Post)</div>
+        </div>
+    
+        <!-- Video Post Form -->
+        <form id="video-form" class="post-form" method="post" enctype="multipart/form-data" style="display: block;">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Title of Your Video" required>
+            <textarea name="description" placeholder="Describe your Aesthetic Moment..." rows="4" required></textarea>
+            <input type="file" name="video" accept="video/*" required>
+            <button type="submit">Upload Video</button>
+        </form>
+    
+        <!-- Image Post Form -->
+        <form id="image-form" class="post-form" method="post" enctype="multipart/form-data" style="display: none;">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Title of Your Image Post" required>
+            <textarea name="caption" placeholder="Describe your Image Post..." rows="4" ></textarea>
+             <!-- AI option for caption generation -->
+             <div class="ai-checkbox">
+                <input type="checkbox" name="auto_generate_caption" id="auto_generate_caption">
+                <label for="auto_generate_caption">Let Controlled Motives generate a caption</label>
+            </div>
+            <input type="file" name="image" accept="image/*" required>
+            <button type="submit">Upload Image</button>
+        </form>
+    </div>
+    
+    <script>
+        // JavaScript to toggle between Video and Image forms
+        function showTab(type) {
+            document.getElementById('video-form').style.display = type === 'video' ? 'block' : 'none';
+            document.getElementById('image-form').style.display = type === 'image' ? 'block' : 'none';
+            
+            document.getElementById('tab-video').classList.toggle('active', type === 'video');
+            document.getElementById('tab-image').classList.toggle('active', type === 'image');
+        }
+
+         const aiCheckbox = document.getElementById('auto_generate_caption');
+        const captionTextarea = document.querySelector('[name="caption"]');
+
+        aiCheckbox.addEventListener('change', () => {
+            if (aiCheckbox.checked) {
+                captionTextarea.disabled = true;
+                captionTextarea.placeholder = "AI will generate your caption.";
+            } else {
+                captionTextarea.disabled = false;
+                captionTextarea.placeholder = "Describe your Image Post...";
+            }
+        });
+    </script>
+    
+</body>
+</html>

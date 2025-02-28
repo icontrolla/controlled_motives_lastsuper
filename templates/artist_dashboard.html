@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ artist.user.username }}'s Profile</title>
+</head>
+<body>
+    <h1>{{ artist.user.username }}</h1>
+    <p>{{ artist.bio }}</p>
+    {% if artist.profile_picture %}
+    <img src="{{ artist.profile_picture.url }}" alt="Profile Picture">
+    {% else %}
+    <p>No profile picture available.</p>
+    {% endif %}
+</body>
+</html>

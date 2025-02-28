@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Wallet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+        }
+        .btn {
+            display: inline-block;
+            background: black;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Blockchain Wallet</h1>
+
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
+
+        {% if wallet %}
+            <p><strong>Wallet Address:</strong> {{ wallet.address }}</p>
+        {% else %}
+            <p>No wallet found. Click below to create one.</p>
+            <a href="{% url 'create_ethereum_wallet' %}" class="btn">Generate Wallet</a>
+        {% endif %}
+    </div>
+
+</body>
+</html>

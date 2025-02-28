@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About [Platform Name]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS styles go here */
+        body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #0a0a0a;
+    color: #f0f0f0;
+    overflow-x: hidden;
+}
+
+.about-page {
+    position: relative;
+    min-height: 100vh;
+    background-image: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0'); /* Replace with your cinematic art-related image */
+    background-size: cover;
+    background-position: center;
+    padding: 4rem 2rem;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Dark overlay for cinematic effect */
+    z-index: 1;
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.title {
+    font-size: 4rem;
+    font-family: 'Playfair Display', serif;
+    color: #ffffff;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeInDown 1s ease forwards;
+}
+
+.section {
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+}
+
+.section:nth-child(2) { animation-delay: 0.2s; }
+.section:nth-child(3) { animation-delay: 0.4s; }
+.section:nth-child(4) { animation-delay: 0.6s; }
+.section:nth-child(5) { animation-delay: 0.8s; }
+
+h2 {
+    font-size: 2rem;
+    font-family: 'Playfair Display', serif;
+    color: #f0f0f0;
+    margin-bottom: 1rem;
+}
+
+p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #d0d0d0;
+}
+
+.highlight {
+    color: #ff007f; /* Bright accent color */
+    font-weight: bold;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    display: inline-block;
+}
+
+li {
+    font-size: 1.1rem;
+    margin: 0.8rem 0;
+}
+
+.bullet {
+    color: #ff007f;
+    font-weight: bold;
+}
+
+.call-to-action p {
+    font-size: 1.2rem;
+}
+
+.join-btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #ff007f, #ff5722);
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.join-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 87, 34, 0.5);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+    </style>
+</head>
+<body>
+    <section class="about-page">
+        <div class="overlay"></div>
+        <div class="content">
+            <h1 class="title">About Controlled Motives</h1>
+
+            <div class="section">
+                <h2>Who We Are</h2>
+                <p>Welcome to Controlled Motives, the leading platform revolutionizing the art world through blockchain technology. Born from the frustration of artists and innovators tired of the traditional art market’s gatekeepers, we’re here to rewrite the rules. Our goal? To turn creativity into currency and give every artist the chance to shine.</p>
+                <p>Leading this charge is our CEO, Walter Tadiwa Nyika, whose vision to empower creators drives our mission. Our goal? To turn creativity into currency and give every artist the chance to shine.</p>
+            </div>
+
+            <div class="section">
+                <h2>Our Vision</h2>
+                <p>At Controlled Motives, we’re on a mission to make sure <span class="highlight">art pays the bills</span>. We envision a world where artists earn from their talent, not just their fame. Recognition might open doors, but revenue keeps them open—and we’re building the key, one blockchain at a time. No more starving artists; just thriving creators cashing in on their passion.</p>
+            </div>
+
+            <div class="section">
+                <h2>What We Offer</h2>
+                <ul>
+                    <li><span class="bullet">Secure Ownership:</span> Your art, your rules. Blockchain locks in proof of authorship that no one can dispute.</li>
+                    <li><span class="bullet">Crystal-Clear Transactions:</span> Every deal is tracked on an open ledger—transparent, fair, and artist-friendly.</li>
+                    <li><span class="bullet">Royalties on Autopilot:</span> Smart contracts kick in every time your work sells, sending earnings straight to you.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Why We Stand Out</h2>
+                <ul>
+                    <li><span class="bullet">Talent Trumps Trends:</span> Your art’s worth isn’t tied to your social media clout—just its quality.</li>
+                    <li><span class="bullet">Worldwide, Yet Welcoming:</span> Reach buyers across the globe while joining a community that feels like family.</li>
+                    <li><span class="bullet">Built for Creators:</span> This is your platform, crafted by artists who know the hustle and want you to win.</li>
+                </ul>
+            </div>
+
+            <div class="section call-to-action">
+                <h2>Get In on the Action</h2>
+                <p>Ready to make your art your paycheck? With [Platform Name], you’re not just creating—you’re cashing in. Join us today and start turning your passion into profit, no spotlight required.</p>
+                <a href="{% url 'profiles:artist_signup' %}" class="join-btn">Join Now</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

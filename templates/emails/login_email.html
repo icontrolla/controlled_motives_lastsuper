@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            text-align: left;
+        }
+        .footer {
+            background: #f1f1f1;
+            color: #888;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    {% csrf_token %}
+    <div class="email-container">
+        <div class="header">
+            <h1>Welcome to Controlled Motives</h1>
+        </div>
+        <div class="content">
+            <p>Hello {{ user.first_name }},</p>
+            <p>Thank you for logging in! We’re thrilled to have you explore our community of artists.</p>
+            {% load static %}
+            <img src="{% static 'media/The Art Images/Controlled_motives.png' %}" alt="Homepage Preview" 
+            style="width: 100%; border-radius: 8px; margin-top: 20px;">
+            <a href="https://controlledmotives.com" class="button">Visit Controlled Motives</a>
+        </div>
+        <div class="footer">
+            <p>© 2025 Controlled Motives. All rights reserved.</p>
+        </div>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <title>{{ item.name }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #121212; /* Dark background for cinematic feel */
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url("{% static 'path/to/your/scene.jpg' %}"); /* Optional background image */
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.6); /* Dim the background slightly */
+            flex-direction: column;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7); /* Cinematic text effect */
+            margin-bottom: 20px;
+        }
+
+        img {
+            width: 300px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        img:hover {
+            transform: scale(1.05); /* Slight zoom effect on hover */
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f5a623;
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #f5a623;
+            color: #fff;
+            padding: 15px 25px;
+            border: none;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        button:hover {
+            background-color: #d4881f;
+        }
+
+        a {
+            margin-top: 30px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #f5a623;
+        }
+
+        .container {
+            z-index: 10; /* Ensure all content is above background */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ item.name }}</h1>
+        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+        <p>{{ item.description }}</p>
+        <p class="price">Price: ${{ item.price }}</p>
+        <button>Add to Cart</button> <!-- You can implement the cart functionality here -->
+        <a href="thrift_store">Back to Thrift Store</a>
+    </div>
+</body>
+</html>

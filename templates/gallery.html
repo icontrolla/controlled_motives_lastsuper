@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% load custom_filters %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Gallery | Controlled Motives</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+  /* Global Styles */
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #333;
+      background-color: #fff;
+    }
+
+        .header-container {
+    position: sticky;
+    top: 0px;
+    z-index: 1000;
+    display: flex;
+    height: 40px;
+    width: 100%;
+    align-items: center;
+    padding: 10px 20px;
+    background: white; /* ✅ Ensures a white background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* ✅ Adds subtle shadow */
+    }
+
+    .menu-btn {
+    display: flex;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 0 -14px;
+    }
+
+
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 30px;
+      border-radius: 50px;
+      width: 80%;
+      margin: 0 70px;
+      border-bottom: 4px solid #eaeaea;
+      background:#3d3a38;
+      color: white;
+
+    }
+
+        .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .artwork-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 30px;
+    background-color: white;
+}
+
+.artwork-card {
+    background: transparent;
+    border-radius: 12px;
+    overflow: hidden;
+    width:100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.artwork-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.artwork-card img {
+    width: 90%;
+    align: center;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+}
+
+.artwork-details {
+    padding: 15px;
+    color: black; /* Ensure text is visible */
+    background: transparent; /* No background */
+    text-align: left;
+}
+
+.artwork-details h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.artwork-details p {
+    font-size: 14px;
+    color: black;
+    margin: 5px 0;
+}
+
+.flower-button {
+    background: linear-gradient(135deg, #ff9800, #ff5722);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin-top: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.flower-button:hover {
+    background: linear-gradient(135deg, #ff5722, #d84315);
+    transform: scale(1.05);
+}
+
+    header .logo {
+      font-size: 1.0rem;
+      font-family: 'ControlledFont';
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+    }
+
+    header nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: white;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+
+    header nav a:hover {
+      color: #0070f3;
+    }
+
+
+    /* Ensure text is visible on dark backgrounds */
+
+    .search-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 0.1rem;
+      margin-left: 10px;
+      color: inherit; /* Adapts to header text color */
+      transition: color 0.3s;
+    }
+
+    .search-btn:hover {
+      color: #0070f3;
+    }
+
+
+/* Gallery Page Layout */
+.gallery-page {
+    padding: 30px;
+}
+
+/* Category Section */
+.category-section {
+    margin-bottom: 50px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.category-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.category-section h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: black; /* Accent color */
+    letter-spacing: 2px;
+}
+
+/* Filter Dropdown */
+.filter-dropdown {
+    padding: 5px 10px;
+    font-size: 1.0em;
+    border-radius: 50px;
+    border: 1px solid #4848a1;
+    background-color: #1c1c1c;
+    color: white;
+    margin-bottom: 10px;
+}
+
+/* Horizontal Scrolling Section */
+.subcategory-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px 0;
+    gap: 15px;
+    scroll-snap-type: x mandatory;
+
+}
+
+/* Subcategory Styling */
+.subcategory {
+    background-color: white;
+    padding: 5px 10px;
+    border-radius: 50px;
+    font-size: 1.0em;
+    white-space: nowrap;
+    text-align: center;
+    text-transform: capitalize;
+    transition: all 0.3s ease, transform 0.3s ease;
+    scroll-snap-align: start;
+    cursor: pointer;
+    opacity: 0;
+    color: black;
+    border: 3px solid black;
+    transform: scale(0.8);
+}
+
+.subcategory.visible {
+    opacity: 1;
+    transform: scale(1);
+    padding: 5px 15px;
+
+}
+
+.subcategory:hover {
+    background-color: #4848a1;
+    color: #000;
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.7);
+}
+
+/* Scrollbar Customization */
+.subcategory-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.subcategory-container::-webkit-scrollbar-thumb {
+    background: #4848a1;
+    border-radius: 4px;
+}
+
+.subcategory-container::-webkit-scrollbar-track {
+    background: #333;
+}
+
+
+
+.artwork-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 30px;
+    background-color: white;
+}
+
+.artwork-card {
+    background: transparent;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.artwork-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.artwork-card img {
+    width: 100%;
+    align: center;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+}
+
+.artwork-details {
+    padding: 15px;
+    color: black; /* Ensure text is visible */
+    background: transparent; /* No background */
+    text-align: left;
+}
+
+.artwork-details h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.artwork-details p {
+    font-size: 14px;
+    color: black;
+    margin: 5px 0;
+}
+
+.flower-button {
+    background: linear-gradient(135deg, #ff9800, #ff5722);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin-top: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.flower-button:hover {
+    background: linear-gradient(135deg, #ff5722, #d84315);
+    transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+    .artwork-grid {
+        grid-template-columns: 1fr; /* One column for very small screens */
+    }
+}
+
+    /* Hide navigation links on smaller screens */
+
+@media (max-width:412px) {
+    font-size: 20px;
+}
+@media (max-width: 768px) {
+
+    .logo{
+        align: center;
+        font-size: 10px;
+        font-family: ControlledFont;
+    }
+
+  /* Sidebar Styling */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -30%; /* Initially hidden */
+            width: 30%;
+            height: 100%;
+            background-color: #222;
+            color: white;
+            border: 2px solid red;
+            z-index: 1050;
+            transition: left 0.3s ease-in-out;
+            padding-top: 20px;
+            box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Sidebar Open */
+        .sidebar.open {
+            left: 0;
+        }
+
+        /* Sidebar Close Button */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Menu Items */
+        .menu-items {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            padding-left: 20px;
+        }
+
+        .menu-items a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .menu-items a:hover {
+            background-color: #333;
+        }
+
+        /* Open Sidebar Button */
+        .open-sidebar-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background-color: #222;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Button styles */
+        .menu-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #333;
+            color: black;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+        .close-btn {
+            background: none;
+            color: red;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            float: right;
+        }
+
+      .menu-items {
+            margin-top: 30px;
+        }
+        .menu-items a {
+            display: block;
+            color: black;
+            text-decoration: none;
+            padding: 10px 0;
+        }
+        .menu-items a:hover {
+            background: #444;
+        }
+
+
+    nav {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    nav.active {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    @media (min-width: 1024px) {
+    /* Make sure it's not shrinking incorrectly */
+    .header-container {
+        width: auto;
+        max-width: 1200px;
+    }
+
+
+
+
+    @font-face {
+        font-family: 'ControlledFont';
+        src: url("{% static 'fonts/controlledfont.otf' %}") format('truetype');
+    }
+
+
+
+
+
+</style>
+<div class="header-container">
+
+
+
+    <header>
+          <div class="logo">Controlled.  Motives</div>
+
+          <nav>
+            <button class="search-btn" onclick="toggleSidebar()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.75"></line>
+              </svg>
+
+            </button>
+
+          <!-- Sidebar Button -->
+    <!--<button class="open-sidebar-btn" onclick="toggleSidebar()">☰</button>
+
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" onclick="toggleSidebar()">×</button>
+        <h2 style="padding-left: 20px;">Settings</h2>
+        <div class="menu-items">
+            <a id="profile-link"><i class="fas fa-user"></i> Profile</a>
+            <a href="{% url 'profiles:wallet_page' %}"><i class="fas fa-wallet"></i> Your Blockchain Wallet</a>
+            <a href="{% url 'profiles:transaction_history' %}"><i class="fas fa-exchange-alt"></i> NFT Transactions</a>
+            <a href="{% url 'profiles:send_eth' %}"><i class="fas fa-paper-plane"></i> Send Ethereum</a>
+            <a href="{% url 'profiles:subscriptions' %}"><i class="fas fa-bell"></i> Subscribe</a>
+            <a href="#" style="color: red;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>-->
+
+
+
+            <a href="#">Home</a>
+            <a href="#">Gallery</a>
+            <a href="#">Artist</a>
+            <a href="#">About</a>
+            <a href="{% url 'profiles:my_profile' %}">Profile</a>
+          </nav>
+        </header>
+  </div>
+
+
+
+<div class="gallery-page">
+    <!-- Fine Arts Section -->
+    <div class="category-section">
+        <h2>Fine Arts</h2>
+        <select class="filter-dropdown" data-category="fine-arts">
+            <option value="all">All</option>
+            <option value="painting">Painting</option>
+            <option value="drawing">Drawing</option>
+            <option value="sculpture">Sculpture</option>
+            <option value="printmaking">Printmaking</option>
+        </select>
+    </div>
+        <div class="subcategory-container" id="fine-arts">
+            <div class="subcategory" data-type="painting">Painting</div>
+            <div class="subcategory" data-type="drawing">Drawing</div>
+            <div class="subcategory" data-type="sculpture">Sculpture</div>
+            <div class="subcategory" data-type="printmaking">Printmaking</div>
+        </div>
+
+
+    <div class="artwork-gallery">
+        {% for art in fine_arts %}
+        <div class="artwork-card">
+            <img src="{{ art.image.url }}" alt="{{ art.title }}">
+            <div class="art-overlay">
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+
+    <!-- Photography & Cinematics Section -->
+    <div class="category-section">
+        <h2>Photography & Cinematics</h2>
+        <select class="filter-dropdown" data-category="photography">
+            <option value="all">All</option>
+            <option value="fine-art">Fine Art Photography</option>
+            <option value="cinematic">Cinematic Photography</option>
+            <option value="experimental">Experimental Photography</option>
+            <option value="video">Short Films & Video Art</option>
+        </select>
+        <div class="subcategory-container" id="photography">
+            <div class="subcategory" data-type="fine-art">Fine Art Photography</div>
+            <div class="subcategory" data-type="cinematic">Cinematic Photography</div>
+            <div class="subcategory" data-type="experimental">Experimental Photography</div>
+            <div class="subcategory" data-type="video">Short Films & Video Art</div>
+        </div>
+        <div class="art-gallery">
+        {% for art in cinematography %}
+        <div class="art-card">
+            <img src="{{ art.image.url }}" alt="{{ artwork.title }}">
+            <h3>{{ art.title }}</h3>
+            </div>
+            {% empty %}
+                <p>No artworks available.</p>
+            {% endfor %}
+            </div>
+        </div>
+
+
+    <!-- Abstract Art Section -->
+    <div class="category-section">
+        <h2>Abstract Art</h2>
+        <select class="filter-dropdown" data-category="abstract-art">
+            <option value="all">All</option>
+            <option value="minimalism">Minimalism</option>
+            <option value="surrealism">Surrealism</option>
+            <option value="expressionism">Expressionism</option>
+        </select>
+        <div class="subcategory-container" id="abstract-art">
+            <div class="subcategory" data-type="minimalism">Minimalism</div>
+            <div class="subcategory" data-type="surrealism">Surrealism</div>
+            <div class="subcategory" data-type="expressionism">Expressionism</div>
+        </div>
+
+        <div class="artwork-gallery">
+        {% for art in abstract_art %}
+        <div class="artwork-card">
+            <img src="{{ art.image.url }}" alt="{{ artwork.title }}">
+            <h3>{{ artwork.title }}</h3>
+        </div>
+    {% empty %}
+        <p>No artworks available.</p>
+    {% endfor %}
+    </div>
+    </div>
+
+    <!-- Add other categories following the same structure -->
+    <!-- Conceptual & Mixed Media -->
+    <div class="category-section">
+        <h2>Conceptual & Mixed Media</h2>
+        <select class="filter-dropdown" data-category="conceptual-art">
+            <option value="all">All</option>
+            <option value="expressionism">Abstract Expressionism</option>
+            <option value="collage">Collage & Assemblage</option>
+            <option value="installation">Installation Art</option>
+            <option value="surreal">Surreal & Psychological Art</option>
+        </select>
+        <div class="subcategory-container" id="conceptual-art">
+            <div class="subcategory" data-type="expressionism">Abstract Expressionism</div>
+            <div class="subcategory" data-type="collage">Collage & Assemblage</div>
+            <div class="subcategory" data-type="installation">Installation Art</div>
+            <div class="subcategory" data-type="surreal">Surreal & Psychological Art</div>
+        </div>
+        <div class="artwork-gallery">
+        {% for art in abstract_art %}
+        <div class="artwork-card">
+            <img src="{{ art.image.url }}" alt="{{ artwork.title }}">
+            <h3>{{ artwork.title }}</h3>
+        </div>
+        {% empty %}
+            <p>No artworks available.</p>
+        {% endfor %}
+        </div>
+    </div>
+
+    <!-- Fashion & Wearable Art -->
+    <div class="category-section">
+        <h2>Fashion & Wearable Art</h2>
+        <select class="filter-dropdown" data-category="fashion-art">
+            <option value="all">All</option>
+            <option value="avant-garde">Avant-Garde & Experimental Fashion</option>
+            <option value="textile">Textile & Fabric Art</option>
+            <option value="digital-fashion">Digital & 3D-Printed Fashion</option>
+            <option value="jewelry">Accessories & Jewelry Design</option>
+        </select>
+        <div class="subcategory-container" id="fashion-art">
+            <div class="subcategory" data-type="avant-garde">Avant-Garde & Experimental Fashion</div>
+            <div class="subcategory" data-type="textile">Textile & Fabric Art</div>
+            <div class="subcategory" data-type="digital-fashion">Digital & 3D-Printed Fashion</div>
+            <div class="subcategory" data-type="jewelry">Accessories & Jewelry Design</div>
+        </div>
+        <div class="artwork-gallery">
+        {% for art in abstract_art %}
+        <div class="artwork-card">
+            <img src="{{ art.image.url }}" alt="{{ artwork.title }}">
+            <h3>{{ artwork.title }}</h3>
+        </div>
+        {% empty %}
+            <p>No artworks available.</p>
+        {% endfor %}
+        </div>
+    </div>
+
+    <!-- Virtual & Interactive Art -->
+    <div class="category-section">
+        <h2>Virtual & Interactive Art</h2>
+        <select class="filter-dropdown" data-category="virtual-art">
+            <option value="all">All</option>
+            <option value="vr-art">Virtual Reality (VR) Art</option>
+            <option value="ar-art">Augmented Reality (AR) Art</option>
+            <option value="projection">Projection Mapping & Light Installations</option>
+            <option value="ai-sound">AI-Driven Sound & Visuals</option>
+        </select>
+        <div class="subcategory-container" id="virtual-art">
+            <div class="subcategory" data-type="vr-art">Virtual Reality (VR) Art</div>
+            <div class="subcategory" data-type="ar-art">Augmented Reality (AR) Art</div>
+            <div class="subcategory" data-type="projection">Projection Mapping & Light Installations</div>
+            <div class="subcategory" data-type="ai-sound">AI-Driven Sound & Visuals</div>
+        </div>
+        <div class="artwork-gallery">
+        {% for art in abstract_art %}
+        <div class="artwork-card">
+            <img src="{{ art.image.url }}" alt="{{ artwork.title }}">
+            <h3>{{ artwork.title }}</h3>
+        </div>
+        {% empty %}
+            <p>No artworks available.</p>
+        {% endfor %}
+        </div>
+    </div>
+
+    <!-- Design & Illustration -->
+    <div class="category-section">
+        <h2>Design & Illustration</h2>
+        <select class="filter-dropdown" data-category="design-illustration">
+            <option value="all">All</option>
+            <option value="editorial">Editorial & Book Illustration</option>
+            <option value="concept">Concept Art & Character Design</option>
+            <option value="typography">Typography & Graphic Design</option>
+            <option value="motion">Motion Design & Animation</option>
+        </select>
+        <div class="subcategory-container" id="design-illustration">
+            <div class="subcategory" data-type="editorial">Editorial & Book Illustration</div>
+            <div class="subcategory" data-type="concept">Concept Art & Character Design</div>
+            <div class="subcategory" data-type="typography">Typography & Graphic Design</div>
+            <div class="subcategory" data-type="motion">Motion Design & Animation</div>
+        </div>
+        <div class="artwork-gallery">
+        {% for art in abstract_art %}
+        <div class="artwork-card">
+            <img src="{{ art.image.url }}" alt="{{ artwork.title }}">
+            <h3>{{ artwork.title }}</h3>
+        </div>
+        {% empty %}
+            <p>No artworks available.</p>
+        {% endfor %}
+        </div>
+    </div>
+
+
+    <script>
+
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("open");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+              // Smooth scroll animation when categories come into view
+              const sections = document.querySelectorAll(".category-section");
+              const observer = new IntersectionObserver(entries => {
+                  entries.forEach(entry => {
+                      if (entry.isIntersecting) {
+                          entry.target.classList.add("visible");
+                      }
+                  });
+              }, { threshold: 0.3 });
+
+              sections.forEach(section => observer.observe(section));
+
+              // Make subcategories fade in when they appear in viewport
+              const subcategories = document.querySelectorAll(".subcategory");
+              const subcategoryObserver = new IntersectionObserver(entries => {
+                  entries.forEach(entry => {
+                      if (entry.isIntersecting) {
+                          entry.target.classList.add("visible");
+                      }
+                  });
+              }, { threshold: 0.5 });
+
+              subcategories.forEach(subcategory => subcategoryObserver.observe(subcategory));
+
+              // Filter functionality
+              document.querySelectorAll(".filter-dropdown").forEach(dropdown => {
+                  dropdown.addEventListener("change", (event) => {
+                      const category = event.target.getAttribute("data-category");
+                      const selectedValue = event.target.value;
+                      const subcategories = document.querySelectorAll(`#${category} .subcategory`);
+
+                      subcategories.forEach(subcategory => {
+                          if (selectedValue === "all" || subcategory.getAttribute("data-type") === selectedValue) {
+                              subcategory.style.display = "block";
+                          } else {
+                              subcategory.style.display = "none";
+                          }
+                      });
+                  });
+              });
+          });
+
+        document.getElementById('scrollLeft').addEventListener('click', function() {
+    document.getElementById('gallery-container').scrollBy({ left: -300, behavior: 'smooth' });
+});
+
+document.getElementById('scrollRight').addEventListener('click', function() {
+    document.getElementById('gallery-container').scrollBy({ left: 300, behavior: 'smooth' });
+});
+
+    </script>
+
+</div>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - Controlled Motives</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Cinematic Fullscreen Background */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                url("{% static 'images/cinematic-bg.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: #e50914;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        li:hover {
+            transform: scale(1.02);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .user-name {
+            flex: 1;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .search-query {
+            font-style: italic;
+            color: #ccc;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            font-size: 18px;
+            color: #aaa;
+        }
+
+        /* Home Button */
+        .home-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #e50914;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .home-button:hover {
+            background-color: #f62a2a;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'home' %}" class="home-button">Home</a>
+    <div class="container">
+        <h1>Search Results</h1>
+        {% if query %}
+            <p class="search-query">Results for "{{ query }}":</p>
+            <ul>
+                {% for user in users %}
+                    <li>
+                        <span class="user-name">
+                            <a href="{% url 'profile' user.id %}" class="user-link">{{ user.username }}</a>
+                        </span>
+                    </li>
+                {% empty %}
+                    <li class="empty-state">No users found.</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-state">Please enter a search term.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

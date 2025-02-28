@@ -1,0 +1,24 @@
+<!-- subscribe_success.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Success</title>
+</head>
+<body>
+    <h1>Subscription Successful!</h1>
+    <p>Thank you for subscribing to the <strong>{{ plan.name }}</strong> plan.</p>
+    <p><strong>Plan Features:</strong></p>
+    <ul>
+        {% for feature in plan.features %}
+            <li>{{ feature }}</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Price:</strong> ${{ plan.price }}</p>
+
+    <p>We are excited to have you on board. Enjoy all the benefits of your new plan!</p>
+
+    <a href="/">Back to Home</a> <!-- Link back to the homepage or dashboard -->
+</body>
+</html>

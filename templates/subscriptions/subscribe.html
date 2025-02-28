@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose a Subscription Plan</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(145deg, #0d0d0d, #1a1a1a);
+            color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #ffcc00;
+            text-shadow: 0 0 8px rgba(255, 204, 0, 0.8), 0 0 16px rgba(255, 204, 0, 0.6);
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2.5rem;
+            justify-content: center;
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, rgba(30, 30, 47, 0.8), rgba(40, 40, 60, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 0 4px 10px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.8), 0 6px 14px rgba(255, 255, 255, 0.2);
+        }
+
+        .product-card h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ffcc00;
+            text-shadow: 0 0 6px rgba(255, 204, 0, 0.8), 0 0 10px rgba(255, 204, 0, 0.5);
+        }
+
+        .product-card p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #e0e0e0;
+        }
+
+        .subscribe-btn {
+            display: inline-block;
+            padding: 0.75rem 1.75rem;
+            background: linear-gradient(135deg, #ffcc00, #ffd700);
+            color: #1a1a1a;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 12px rgba(255, 204, 0, 0.6), 0 2px 6px rgba(255, 204, 0, 0.3);
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .subscribe-btn:hover {
+            background: linear-gradient(135deg, #ffd700, #ffcc33);
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(255, 204, 0, 0.8), 0 4px 8px rgba(255, 204, 0, 0.4);
+        }
+
+        .subscribe-btn:active {
+            transform: scale(0.95);
+        }
+        /* Home Button */
+        .home-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background-color: #e50914;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .home-button:hover {
+            background-color: #f62a2a;
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+<body>
+    <a href="{% url 'profiles:home' %}" class="home-button">Home</a>
+    <h1>Explore Immense Art with Subscription Plans</h1>
+    <div class="product-container">
+        {% for product in products %}
+        <div class="product-card">
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.description }}</p>
+            {% for price in product.prices.all %}
+                <p>Price: {{ price.human_readable_price }}</p>
+                <button class="subscribe-btn" data-price-id="{{ price.id }}">Subscribe</button>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+<script>
+    document.querySelectorAll('.subscribe-btn').forEach(button => {
+        button.addEventListener('click', async (event) => {
+            const priceId = event.target.getAttribute('data-price-id');
+            try {
+                const response = await fetch(`/payments/create-checkout-session/${priceId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.redirected) {
+                    window.location.href = response.url; // Redirect to Stripe Checkout
+                } else {
+                    const data = await response.json();
+                    alert(data.message || 'An error occurred.');
+                }
+            } catch (error) {
+                console.error('Error creating checkout session:', error);
+                alert('Something went wrong. Please try again later.');
+            }
+        });
+    });
+</script>
+</html>

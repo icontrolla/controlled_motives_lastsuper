@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Artwork</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+                /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* Cinematic Display for Artwork */
+        .cinematic-page {
+            padding-top: 60px;
+        }
+
+        .artwork-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            margin: 50px 0;
+            position: relative;
+        }
+
+        .artwork-image img {
+            max-height: 80vh;
+            width: auto;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+        }
+
+        .artwork-details {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+        }
+
+        .artwork-details h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .artwork-details .artist-name {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .artwork-details .artwork-description {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .artwork-details .price {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .buy-button {
+            padding: 10px 20px;
+            background-color: #f15a29;
+            color: #fff;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .buy-button:hover {
+            background-color: #c43e19;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body class="cinematic-page">
+    <header>
+        <div class="navbar">
+            <a href="/">Home</a>
+            <a href="/profiles/home/">Profile</a>
+            <a href="/logout/">Logout</a>
+        </div>
+    </header>
+    <main>
+        
+        <form action="{% url 'process_payment' artwork_id=artwork.id price=artwork.price %}" method="post">
+            {% csrf_token %}
+            <script
+                src="https://checkout.stripe.com/checkout.js" 
+                class="stripe-button"
+                data-key="your-publishable-stripe-key"
+                data-amount="{{ artwork.price|floatformat:2|multiply:100 }}"
+                data-name="Controlled Motives"
+                data-description="Purchase Artwork"
+                data-image="URL_TO_YOUR_IMAGE"
+                data-currency="usd">
+            </script>
+        </form>
+        
+    </main>
+    <footer>
+        <p>&copy; 2025 Controlled Motives</p>
+    </footer>
+</body>
+</html>

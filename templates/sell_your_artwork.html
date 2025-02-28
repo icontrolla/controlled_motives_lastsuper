@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist & Collector - Artwork Transaction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 450px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .form input, .form textarea, .form select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .form textarea {
+            height: 100px;
+        }
+
+        .form button {
+            background: linear-gradient(to right, #1f4037, #99f2c8);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            color: #000000;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .form button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #99f2c8, #1f4037);
+        }
+
+        .insight {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            text-align: center;
+            line-height: 1.5;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sell Your Artwork</h1>
+            <p>Artists can list their artwork for sale, and collectors can purchase directly through blockchain.</p>
+        </div>
+        <form class="form" action="/sell-artwork" method="post">
+            <label for="artwork-title">Artwork Title</label>
+            <input type="text" id="artwork-title" name="artwork-title" placeholder="Enter the title of your artwork" required>
+
+            <label for="price">Price</label>
+            <input type="number" id="price" name="price" placeholder="Enter the price (in ETH)" required>
+
+            <label for="currency">Currency</label>
+            <select id="currency" name="currency" required>
+                <option value="ETH">Ethereum (ETH)</option>
+                <option value="BTC">Bitcoin (BTC)</option>
+                <option value="USD">US Dollar (USD)</option>
+            </select>
+
+            <label for="description">Artwork Description</label>
+            <textarea id="description" name="description" placeholder="Describe your artwork" required></textarea>
+
+            <label for="wallet">Your Blockchain Wallet</label>
+            <input type="text" id="wallet" name="wallet" placeholder="Enter your wallet address" required>
+
+            <label for="blockchain">Blockchain</label>
+            <select id="blockchain" name="blockchain" required>
+                <option value="ethereum">Ethereum</option>
+                <option value="polygon">Polygon</option>
+                <option value="solana">Solana</option>
+            </select>
+
+            <button type="submit">List Artwork</button>
+        </form>
+        <p class="insight">By listing your artwork, you enter the blockchain world. Collectors can securely purchase your artwork, and you receive payments directly to your wallet, ensuring transparency and efficiency.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="payment-page">
+        <!-- Fullscreen cinematic background video -->
+        <div class="background-video-container">
+            <video autoplay muted loop id="background-video">
+                <source src="{% static 'videos/cinematic_video.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Overlay content with payment details -->
+        <div class="overlay">
+            <div class="payment-content">
+                <h1>Purchase Artwork</h1>
+                <h2>{{ artwork.title }}</h2>
+                <p>{{ artwork.description }}</p>
+                <p><strong>Price:</strong> ${{ price }}</p>
+
+                <!-- Payment button (this could be linked to Stripe or another payment processor) -->
+                <a href="{% url 'profiles:payment_processing' artwork_id=artwork.id price=price %}" class="btn btn-primary">Proceed to Payment</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_styles %}
+    <style>
+        /* Fullscreen background video */
+        .background-video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        #background-video {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Overlay content */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);  /* Dark overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .payment-content {
+            color: white;
+            text-align: center;
+            max-width: 600px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+
+        .payment-content h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .payment-content h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .payment-content p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            background-color: #FF5733;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.5em;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #C0392B;
+            transform: scale(1.1);
+        }
+    </style>
+{% endblock %}

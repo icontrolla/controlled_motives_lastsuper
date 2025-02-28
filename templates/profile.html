@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Controlled Motives</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styling */
+
+        /* General Styling */
+/* General Styling */
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(white) no-repeat center fixed;
+    background-size: cover;
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    overflow-x: hidden; /* Prevents horizontal scroll */
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #e50914;
+}
+
+/* Hero Section */
+.hero {
+    margin: 20px auto;
+    max-width: 90%;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 50px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    color: black;
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.profile-info h1 {
+    font-size: 36px;
+    margin: 0;
+}
+
+.profile-info p {
+    margin: 15px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.stats {
+    display: flex;
+    gap: 15px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 18px;
+    background: #e50914;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+    background: #f62a2a;
+    transform: scale(1.05);
+}
+
+/* Navigation */
+.nav-b {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    max-width: 90%;
+    margin: 20px auto;
+    padding: 10px;
+    background: white;
+    border-radius: 15px;
+}
+
+.nav-button {
+    background: white;
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    border: 3px solid black;
+}
+
+.nav-button:hover {
+    background: #e50914;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Responsive Post Grid */
+.posts-section {
+    display: none;
+    animation: fadeIn 1.5s ease-out;
+}
+
+.posts-section.active {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Post Items */
+.post-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.post-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+}
+
+.post-item img,
+.post-item video {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+/* Post Details */
+.post-details {
+    padding: 15px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+/* Flower Section */
+.flower-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+}
+
+.flower-button {
+    background: #eb51ba;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.flower-button:hover {
+    background: #f451a3;
+    transform: scale(1.1);
+}
+
+/* Home Button */
+.home-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    background: #e50914;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.home-button:hover {
+    background: #f62a2a;
+    transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px;
+    }
+
+    .profile-picture img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-info h1 {
+        font-size: 28px;
+    }
+
+    .stats {
+        justify-content: center;
+    }
+
+    .profile-actions {
+        justify-content: center;
+    }
+
+    .nav-b {
+        flex-wrap: wrap;
+        padding: 8px;
+    }
+
+    .posts-section.active {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+
+        
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <a href="{% url 'profiles:home' %}" class="home-button">Home</a>
+        <div class="profile-picture">
+            <img src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'images/default_profile_pic.jpg' %}{% endif %}" alt="Profile Picture">
+        </div>
+        <div class="profile-info">
+            <h1>{{ user.username }}</h1>
+            <div class="stats">
+                <span>{{ user.profile.post_count|default:0 }} posts</span>
+                <span>{{ user.profile.total_flowers|default:0 }} flowers</span>
+            </div>
+            <p>{{ user.profile.bio }}</p>
+            
+            <div class="profile-actions">
+                <a href="{% url 'profiles:edit_profile' %}" class="btn">Edit Profile</a>
+                <a href="{% url 'profiles:create_post' %}" class="btn">New Post</a>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="profile-gallery">
+        <div class="nav-b">
+            <button class="nav-button active" onclick="showSection(event, 'image-section')">Potrait Posts</button>
+            <button class="nav-button" onclick="showSection(event, 'video-section')">Aesthetic Moments</button>
+        </div>
+   
+        <div id="image-section" class="posts-section active">
+            {% for Post in images %}
+                {% if Post.image %}
+                <div class="post-item">
+                    <img src="{{ post.image.url }}" alt="Post Image">
+                    <div class="flower-section">
+                        <button class="flower-button">🌹</button>
+                        <span class="flower-count">{{ post.likes.count }} flowers</span>
+                    </div>
+                    <div class="post-details">
+                        <p><strong> {{ post.user.username }}</strong>  This piece depicts, "{{ post.caption }}  "</p>
+                        <div class="smart_date">
+                        {% load custom_filters %}
+                        <p> <em> {{ post.created_at|smart_date }}</em></p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div id="video-section" class="posts-section">
+            {% for post in user_posts %}
+                {% if post.video %}
+                <div class="post-item">
+                    <video controls>
+                        <source src="{{ post.video.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="flower-section">
+                        <button class="flower-button">🌹</button>
+                        <span class="flower-count">{{ post.likes.count }} flowers</span>
+                    </div>
+                    <div class="post-details">
+                        <p><strong> {{ post.user.username }}</strong>  This piece reflects, "{{ post.caption }}  "</p>
+                        <div class="smart_date">
+                        {% load custom_filters %}
+                        <p> <em> {{ post.created_at|smart_date }}</em></p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function showSection(event, sectionId) {
+            document.querySelectorAll('.posts-section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.nav-button').forEach(button => button.classList.remove('active'));
+
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
